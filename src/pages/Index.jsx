@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Box, Button, Flex, FormControl, FormLabel, Heading, Input, List, ListItem, Select, Stack, Text, Textarea } from "@chakra-ui/react";
 import { FaEdit, FaTrash, FaFileExport, FaPlus } from "react-icons/fa";
 // import HelloMessage from '../components/HelloMessage'; // Adjust the import path as necessary
-import { supabase } from '../supabase';
+import { supabase } from "../supabase";
 
 const categories = ["Salary", "Groceries", "Bills", "Transport", "Entertainment", "Workgit "];
 
@@ -18,12 +18,10 @@ const Index = () => {
 
   useEffect(() => {
     const fetchTransactions = async () => {
-      const { data, error } = await supabase
-        .from('transactions')
-        .select('*');
+      const { data, error } = await supabase.from("transactions").select("*");
 
       if (error) {
-        console.error('error', error);
+        console.error("error", error);
       } else {
         setTransactions(data);
       }
@@ -31,19 +29,23 @@ const Index = () => {
 
     fetchTransactions();
   }, []);
-  
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleAddTransaction = () => {
+  const handleAddTransaction = async () => {
     const newTransaction = {
-      id: transactions.length + 1,
       ...formData,
       amount: parseFloat(formData.amount),
     };
-    setTransactions([...transactions, newTransaction]);
+    const { data, error } = await supabase.from("transactions").insert([newTransaction]);
+    if (error) {
+      console.error("error", error);
+    } else {
+      setTransactions([...transactions, ...data]);
+    }
   };
 
   const handleSelectTransaction = (transaction) => {
@@ -51,13 +53,27 @@ const Index = () => {
     setFormData(transaction);
   };
 
-  const handleEditTransaction = () => {
-    setTransactions(transactions.map((transaction) => (transaction.id === selectedTransaction.id ? { ...formData, amount: parseFloat(formData.amount) } : transaction)));
-    setSelectedTransaction(null);
+  const handleEditTransaction = async () => {
+    const updatedTransaction = {
+      ...formData,
+      amount: parseFloat(formData.amount),
+    };
+    const { data, error } = await supabase.from("transactions").update(updatedTransaction).match({ id: selectedTransaction.id });
+    if (error) {
+      console.error("error", error);
+    } else {
+      setTransactions(transactions.map((transaction) => (transaction.id === selectedTransaction.id ? data[0] : transaction)));
+      setSelectedTransaction(null);
+    }
   };
 
-  const handleDeleteTransaction = (id) => {
-    setTransactions(transactions.filter((transaction) => transaction.id !== id));
+  const handleDeleteTransaction = async (id) => {
+    const { data, error } = await supabase.from("transactions").delete().match({ id });
+    if (error) {
+      console.error("error", error);
+    } else {
+      setTransactions(transactions.filter((transaction) => transaction.id !== id));
+    }
   };
 
   const handleExportTransactions = () => {
