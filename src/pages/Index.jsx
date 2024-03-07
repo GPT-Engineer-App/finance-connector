@@ -18,7 +18,7 @@ const Index = () => {
 
   useEffect(() => {
     const fetchTransactions = async () => {
-      const { data, error } = await supabase.from("transactions").select("*");
+      const { data, error } = await supabase.from("transactions").select("*").order("date", { ascending: false });
 
       if (error) {
         console.error("error", error);
@@ -44,10 +44,9 @@ const Index = () => {
     if (error) {
       console.error("error", error);
     } else {
-      setTransactions([...transactions, ...data])
+      setTransactions([...transactions, ...data]);
     }
   };
-
 
   const handleSelectTransaction = (transaction) => {
     setSelectedTransaction(transaction);
