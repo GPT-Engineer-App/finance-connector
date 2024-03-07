@@ -40,13 +40,14 @@ const Index = () => {
       ...formData,
       amount: parseFloat(formData.amount),
     };
-    const { data, error } = await supabase.from("transactions").insert([newTransaction]);
+    const { data, error } = await supabase.from("transactions").insert([newTransaction]).select("*");
     if (error) {
       console.error("error", error);
     } else {
-      setTransactions([...transactions, data[0]]);
+      setTransactions([...transactions, ...data])
     }
   };
+
 
   const handleSelectTransaction = (transaction) => {
     setSelectedTransaction(transaction);
