@@ -6,7 +6,7 @@ export default defineConfig({
     host: "0.0.0.0",
     port: "8080",
     proxy: {
-      '/api': 'http://localhost:3001', // Proxy API requests to Express server
+      '/api': 'https://bc3rpp-ip-84-209-2-193.tunnelmole.net', // Proxy API requests to Express server
     },
   },
   plugins: [react()],
