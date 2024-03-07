@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { Box, Button, Flex, FormControl, FormLabel, Heading, Input, List, ListItem, Select, Stack, Text, Textarea } from "@chakra-ui/react";
 import { FaEdit, FaTrash, FaFileExport, FaPlus } from "react-icons/fa";
+import HelloMessage from '../components/HelloMessage'; // Adjust the import path as necessary
+
 
 // Initialize dummy data for transactions
 const initialTransactions = [
@@ -9,7 +11,7 @@ const initialTransactions = [
   { id: 3, date: "2023-04-03", amount: 20, type: "expense", category: "Transport" },
 ];
 
-const categories = ["Salary", "Groceries", "Bills", "Transport", "Entertainment", "Work"];
+const categories = ["Salary", "Groceries", "Bills", "Transport", "Entertainment", "Workgit "];
 
 const Index = () => {
   const [transactions, setTransactions] = useState(initialTransactions);
@@ -94,6 +96,7 @@ const Index = () => {
   return (
     <Box p={5}>
       <Heading mb={5}>Personal Financial Manager</Heading>
+      <HelloMessage />
 
       {/* Transaction Form */}
       <Box borderWidth="1px" borderRadius="lg" p={4} mb={5}>
