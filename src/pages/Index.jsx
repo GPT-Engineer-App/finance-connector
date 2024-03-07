@@ -44,7 +44,7 @@ const Index = () => {
     if (error) {
       console.error("error", error);
     } else {
-      setTransactions([...transactions, ...data]);
+      setTransactions([...transactions, data[0]]);
     }
   };
 
