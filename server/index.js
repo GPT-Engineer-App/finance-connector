@@ -9,7 +9,7 @@ app.use(express.json());
 
 // Example route
 app.get('/api/hello', (req, res) => {
-  res.json({ message: 'Hello from backend boss!' });
+  res.json({ message: 'Hello from backend bossman!' });
 });
 
 app.listen(PORT, () => {

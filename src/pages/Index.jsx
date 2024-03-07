@@ -1,20 +1,13 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Button, Flex, FormControl, FormLabel, Heading, Input, List, ListItem, Select, Stack, Text, Textarea } from "@chakra-ui/react";
 import { FaEdit, FaTrash, FaFileExport, FaPlus } from "react-icons/fa";
-import HelloMessage from '../components/HelloMessage'; // Adjust the import path as necessary
-
-
-// Initialize dummy data for transactions
-const initialTransactions = [
-  { id: 1, date: "2023-04-01", amount: 500, type: "income", category: "Salary" },
-  { id: 2, date: "2023-04-02", amount: 50, type: "expense", category: "Groceries" },
-  { id: 3, date: "2023-04-03", amount: 20, type: "expense", category: "Transport" },
-];
+// import HelloMessage from '../components/HelloMessage'; // Adjust the import path as necessary
+import { supabase } from '../supabase';
 
 const categories = ["Salary", "Groceries", "Bills", "Transport", "Entertainment", "Workgit "];
 
 const Index = () => {
-  const [transactions, setTransactions] = useState(initialTransactions);
+  const [transactions, setTransactions] = useState([]);
   const [selectedTransaction, setSelectedTransaction] = useState(null);
   const [formData, setFormData] = useState({
     date: "",
@@ -23,6 +16,22 @@ const Index = () => {
     category: categories[0],
   });
 
+  useEffect(() => {
+    const fetchTransactions = async () => {
+      const { data, error } = await supabase
+        .from('transactions')
+        .select('*');
+
+      if (error) {
+        console.error('error', error);
+      } else {
+        setTransactions(data);
+      }
+    };
+
+    fetchTransactions();
+  }, []);
+  
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
@@ -76,7 +85,7 @@ const Index = () => {
               <Text fontSize="sm">{transaction.date}</Text>
               <Text fontWeight="bold">{transaction.category}</Text>
               <Text color={transaction.type === "expense" ? "red.500" : "green.500"}>
-                {transaction.type === "expense" ? "-" : "+"}${transaction.amount.toFixed(2)}
+                {transaction.type === "expense" ? "-" : "+"}${transaction.amount}
               </Text>
             </Box>
             <Box>
@@ -96,7 +105,6 @@ const Index = () => {
   return (
     <Box p={5}>
       <Heading mb={5}>Personal Financial Manager</Heading>
-      <HelloMessage />
 
       {/* Transaction Form */}
       <Box borderWidth="1px" borderRadius="lg" p={4} mb={5}>
@@ -138,7 +146,7 @@ const Index = () => {
       {/* Total Balance */}
       <Flex justify="space-between" align="center" mt={5}>
         <Heading as="h3" size="lg">
-          Total Balance: ${getTotalBalance().toFixed(2)}
+          Total Balance: ${getTotalBalance()}
         </Heading>
         <Button leftIcon={<FaFileExport />} colorScheme="blue" onClick={handleExportTransactions}>
           Export Transactions
