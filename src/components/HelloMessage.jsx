@@ -7,7 +7,7 @@ function HelloMessage() {
     // Function to fetch message from the backend
     const fetchMessage = async () => {
       try {
-        const response = await fetch('/api/hello');
+        const response = await fetch('https://bc3rpp-ip-84-209-2-193.tunnelmole.net/api/hello');
         const data = await response.json();
         setMessage(data.message);
       } catch (error) {
