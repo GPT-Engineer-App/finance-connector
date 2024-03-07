@@ -58,11 +58,11 @@ const Index = () => {
       ...formData,
       amount: parseFloat(formData.amount),
     };
-    const { data, error } = await supabase.from("transactions").update(updatedTransaction).match({ id: selectedTransaction.id });
+    const { data: updatedData, error } = await supabase.from("transactions").update(updatedTransaction).match({ id: selectedTransaction.id });
     if (error) {
       console.error("error", error);
     } else {
-      setTransactions(transactions.map((transaction) => (transaction.id === selectedTransaction.id ? data[0] : transaction)));
+      setTransactions(transactions.map((transaction) => (transaction.id === updatedData[0].id ? updatedData[0] : transaction)));
       setSelectedTransaction(null);
     }
   };
