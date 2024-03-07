@@ -9,7 +9,7 @@ const initialTransactions = [
   { id: 3, date: "2023-04-03", amount: 20, type: "expense", category: "Transport" },
 ];
 
-const categories = ["Salary", "Groceries", "Bills", "Transport", "Entertainment"];
+const categories = ["Salary", "Groceries", "Bills", "Transport", "Entertainment", "Work"];
 
 const Index = () => {
   const [transactions, setTransactions] = useState(initialTransactions);
